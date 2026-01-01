@@ -1132,52 +1132,272 @@
             </div>
 
             <div id="customer-master" class="view-section">
-                <div class="empty-state">
-                    <i class="bi bi-people"></i>
-                    <h3>Customer Master</h3>
-                    <p>Manage customers and contact details.</p>
-                </div>
+    <div class="page-header">
+        <div class="page-heading">
+            <h2>Customer Master</h2>
+            <p>Manage customers and contact details.</p>
+        </div>
+        <button class="btn btn-primary-soft">
+            <i class="bi bi-plus-lg me-2"></i>
+            Add Customer
+        </button>
+    </div>
+
+    <div class="action-toolbar">
+        <div class="search-input">
+            <i class="bi bi-search"></i>
+            <input id="customerSearch" type="text" placeholder="Search customers...">
+        </div>
+
+        <div class="toolbar-actions">
+            <button class="btn btn-outline-compact" disabled>
+                <i class="bi bi-envelope me-2"></i>
+                Send Email
+            </button>
+            <button class="btn btn-danger-compact" disabled>
+                <i class="bi bi-trash3 me-2"></i>
+                Delete
+            </button>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-scroll">
+            <table class="table-consignments">
+                <thead>
+                    <tr>
+                        <th style="width:46px">
+                            <input type="checkbox" class="form-check-input">
+                        </th>
+                        <th>Customer Code</th>
+                        <th>Customer Name</th>
+                        <th>Address</th>
+                        <th>Mobile No</th>
+                        <th>Email</th>
+                        <th style="width:64px"></th>
+                    </tr>
+                </thead>
+                <tbody id="customerTableBody">
+                    <tr class="empty-row">
+                        <td colspan="7">No customers found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footerbar">
+            <div class="left">
+                <span id="customerTableInfo">Showing 0 to 0 of 0 records</span>
+                <span>Show</span>
+                <select>
+                    <option selected>50</option>
+                </select>
+                <span>per page</span>
             </div>
+            <div class="right">
+                <button class="pager-btn">Previous</button>
+                <span class="page-pill">1</span>
+                <button class="pager-btn">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
             <div id="vehicle-master" class="view-section">
-                <div class="empty-state">
-                    <i class="bi bi-truck-front"></i>
-                    <h3>Vehicle Master</h3>
-                    <p>Manage vehicles, capacity, and availability.</p>
-                </div>
+    <div class="page-header">
+        <div class="page-heading">
+            <h2>Vehicle Master</h2>
+            <p>Manage vehicles, capacity, and availability.</p>
+        </div>
+        <button class="btn btn-primary-soft">
+            <i class="bi bi-plus-lg me-2"></i>
+            Add Vehicle
+        </button>
+    </div>
+
+    <div class="action-toolbar">
+        <div class="search-input">
+            <i class="bi bi-search"></i>
+            <input id="vehicleSearch" type="text" placeholder="Search vehicles...">
+        </div>
+
+        <div class="toolbar-actions">
+            <button class="btn btn-danger-compact" disabled>
+                <i class="bi bi-trash3 me-2"></i>
+                Delete
+            </button>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-scroll">
+            <table class="table-consignments">
+                <thead>
+                    <tr>
+                        <th style="width:46px">
+                            <input type="checkbox" class="form-check-input">
+                        </th>
+                        <th>Vehicle No</th>
+                        <th>Vehicle Type</th>
+                        <th>Capacity</th>
+                        <th>Driver Name</th>
+                        <th>Status</th>
+                        <th style="width:64px"></th>
+                    </tr>
+                </thead>
+                <tbody id="vehicleTableBody">
+                    <tr class="empty-row">
+                        <td colspan="7">No vehicles found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footerbar">
+            <div class="left">
+                <span id="vehicleTableInfo">Showing 0 to 0 of 0 records</span>
+                <span>Show</span>
+                <select>
+                    <option selected>50</option>
+                </select>
+                <span>per page</span>
             </div>
+            <div class="right">
+                <button class="pager-btn">Previous</button>
+                <span class="page-pill">1</span>
+                <button class="pager-btn">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
             <div id="lr-master" class="view-section">
-                <div class="empty-state">
-                    <i class="bi bi-truck"></i>
-                    <h3>LR Master</h3>
-                    <p>Create and manage LR records.</p>
-                </div>
-            </div>
+    <div class="page-header">
+        <div class="page-heading">
+            <h2>LR Master</h2>
+            <p>Create and manage LR records.</p>
+        </div>
+        <button class="btn btn-primary-soft">
+            <i class="bi bi-plus-lg me-2"></i>
+            Create LR
+        </button>
+    </div>
 
-            <div id="lr-allotment" class="view-section">
-                <div class="empty-state">
-                    <i class="bi bi-diagram-3"></i>
-                    <h3>LR Allotment</h3>
-                    <p>Assign LRs to trips and vehicles.</p>
-                </div>
-            </div>
+    <div class="table-card">
+        <div class="table-scroll">
+            <table class="table-consignments">
+                <thead>
+                    <tr>
+                        <th>LR No</th>
+                        <th>Customer</th>
+                        <th>Vehicle</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="lrTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div id="lr-allotment" class="view-section">
+    <div class="page-header">
+        <div class="page-heading">
+            <h2>LR Allotment</h2>
+            <p>Assign LRs to vehicles.</p>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <table class="table-consignments">
+            <thead>
+                <tr>
+                    <th>LR No</th>
+                    <th>Vehicle</th>
+                    <th>Driver</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>LR001</td>
+                    <td>MH12 AB 1234</td>
+                    <td>Ramesh</td>
+                    <td>Assigned</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 
             <div id="invoice-master" class="view-section">
-                <div class="empty-state">
-                    <i class="bi bi-receipt"></i>
-                    <h3>Invoice Master</h3>
-                    <p>Create invoices and track billing status.</p>
-                </div>
-            </div>
+    <div class="page-header">
+        <div class="page-heading">
+            <h2>Invoice Master</h2>
+            <p>Create invoices for completed LRs.</p>
+        </div>
+    </div>
 
-            <div id="payment-advice" class="view-section">
-                <div class="empty-state">
-                    <i class="bi bi-credit-card"></i>
-                    <h3>Payment Advice</h3>
-                    <p>Manage payment advice and settlements.</p>
-                </div>
-            </div>
+    <div class="table-card">
+        <table class="table-consignments">
+            <thead>
+                <tr>
+                    <th>Invoice No</th>
+                    <th>LR No</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>INV001</td>
+                    <td>LR001</td>
+                    <td>₹25,000</td>
+                    <td>Generated</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div id="payment-advice" class="view-section">
+    <div class="page-header">
+        <div class="page-heading">
+            <h2>Payment Advice</h2>
+            <p>Track payment status.</p>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <table class="table-consignments">
+            <thead>
+                <tr>
+                    <th>Invoice No</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Payment Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>INV001</td>
+                    <td>Rahul Traders</td>
+                    <td>₹25,000</td>
+                    <td>Pending</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 
             <div id="reports" class="view-section">
                 <div class="empty-state">
@@ -1327,12 +1547,190 @@ document.addEventListener("DOMContentLoaded", () => {
                 link.dataset.bcParent,
                 link.dataset.bcChild
             );
+            
+            if (link.dataset.page === "customer-master") {
+    renderCustomers();
+}
+if (link.dataset.page === "vehicle-master") {
+    renderVehicles();
+}
+if (link.dataset.page === "lr-master") {
+    renderLRMaster();
+}
+
+
         });
     });
+/* =========================
+   TOP-LEVEL NAVIGATION
+   (Dashboard / Reports / Settings)
+========================= */
+document.querySelectorAll(".menu-link[data-page]:not(.menu-link--dropdown)").forEach(link => {
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // remove active states
+        document.querySelectorAll(".menu-link").forEach(l => l.classList.remove("active"));
+        document.querySelectorAll(".submenu-link").forEach(l => l.classList.remove("active"));
+
+        link.classList.add("active");
+
+        const targetId = link.dataset.page;
+        const label = link.querySelector("span")?.textContent || "";
+
+        setActiveSection(targetId, label, "");
+
+        // close sidebar on mobile
+        if (window.innerWidth < 992) {
+            document.getElementById("sidebar").classList.remove("show");
+        }
+    });
+});
 
     /* 🔥 RENDER DATA */
     renderConsignments();
 });
+
+/* =========================
+   CUSTOMER DATA
+========================= */
+const customers = [
+    {
+        code: "CUS001",
+        name: "Rahul Traders",
+        address: "12 MG Road, Pune",
+        mobile: "+91-9876543210",
+        email: "rahul@traders.com"
+    },
+    {
+        code: "CUS002",
+        name: "Sharma Enterprises",
+        address: "45 Ring Road, Delhi",
+        mobile: "+91-9123456780",
+        email: "info@sharmaent.com"
+    },
+    {
+        code: "CUS003",
+        name: "Patil Logistics",
+        address: "MIDC Area, Nashik",
+        mobile: "+91-9988776655",
+        email: "contact@patillogistics.com"
+    }
+];
+function renderCustomers() {
+    const tbody = document.getElementById("customerTableBody");
+    tbody.innerHTML = "";
+
+    customers.forEach(c => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td><input type="checkbox" class="form-check-input"></td>
+            <td>${c.code}</td>
+            <td>${c.name}</td>
+            <td class="cell-muted">${c.address}</td>
+            <td>${c.mobile}</td>
+            <td>${c.email}</td>
+            <td>
+                <button class="kebab-btn">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    document.getElementById("customerTableInfo").textContent =
+        `Showing 1 to ${customers.length} of ${customers.length} records`;
+}
+/* =========================
+   VEHICLE DATA
+========================= */
+const vehicles = [
+    {
+        number: "MH12 AB 1234",
+        type: "Truck",
+        capacity: "20 Ton",
+        driver: "Ramesh Kumar",
+        status: "Available"
+    },
+    {
+        number: "MH14 CD 5678",
+        type: "Container",
+        capacity: "25 Ton",
+        driver: "Suresh Patil",
+        status: "In Transit"
+    },
+    {
+        number: "MH15 EF 9012",
+        type: "Mini Truck",
+        capacity: "10 Ton",
+        driver: "Amit Sharma",
+        status: "Available"
+    }
+];
+function renderVehicles() {
+    const tbody = document.getElementById("vehicleTableBody");
+    tbody.innerHTML = "";
+
+    vehicles.forEach(v => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td><input type="checkbox" class="form-check-input"></td>
+            <td>${v.number}</td>
+            <td>${v.type}</td>
+            <td>${v.capacity}</td>
+            <td>${v.driver}</td>
+            <td>
+                <span class="badge ${v.status === 'Available' ? 'bg-success' : 'bg-warning'}">
+                    ${v.status}
+                </span>
+            </td>
+            <td>
+                <button class="kebab-btn">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    document.getElementById("vehicleTableInfo").textContent =
+        `Showing 1 to ${vehicles.length} of ${vehicles.length} records`;
+}
+
+const lrs = [
+    { no: "LR001", customer: "Rahul Traders", vehicle: "MH12 AB 1234", from: "Pune", to: "Mumbai", status: "Created" },
+    { no: "LR002", customer: "Sharma Ent.", vehicle: "MH14 CD 5678", from: "Delhi", to: "Jaipur", status: "In Transit" }
+];
+
+function renderLRMaster() {
+    const tbody = document.getElementById("lrTableBody");
+    tbody.innerHTML = "";
+
+    lrs.forEach(lr => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${lr.no}</td>
+                <td>${lr.customer}</td>
+                <td>${lr.vehicle}</td>
+                <td>${lr.from}</td>
+                <td>${lr.to}</td>
+                <td>${lr.status}</td>
+                <td>
+                    <button class="kebab-btn">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+
 </script>
 
 </body>
