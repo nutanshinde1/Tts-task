@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejos Transport | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: rgb(117, 177, 211);
+            --primary-dark: rgb(76, 148, 190);
+            --primary-light: rgba(231, 233, 236, 0.973);
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --dark: #2c3e50;
+            --text: #4a5568;
+            --text-muted: #718096;
+            --border: #e2e8f0;
+            --bg-body: #f7fafc;
+            --bg-surface: #ffffff;
+            --sidebar-link: #0f172a;
+            --sidebar-link-muted: #334155;
+            --sidebar-hover: #f1f5f9;
+            --sidebar-active: #e2e8f0;
+            --sidebar-width: 260px;
+            --sidebar-collapsed-width: 70px;
+            --header-height: 70px;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text);
+            overflow-x: hidden;
+            font-size: 0.875rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar-header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .brand-logo-box {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--dark);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed .brand-name {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            list-style: none;
+            padding: 20px 12px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .menu-header {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin: 12px 0 8px 12px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed .menu-header {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            color: var(--sidebar-link);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .menu-link i {
+            font-size: 1.05rem;
+            min-width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-link span {
+            transition: all 0.3s ease;
+        }
+
+        .menu-link:hover {
+            background-color: var(--sidebar-hover);
+            color: var(--sidebar-link);
+        }
+
+        .menu-link.active {
+            background-color: var(--sidebar-active);
+            color: var(--sidebar-link);
+            font-weight: 600;
+        }
+
+        .menu-link--dropdown {
+            position: relative;
+        }
+
+        .dropdown-icon {
+            margin-left: auto;
+            font-size: 0.85rem;
+            color: var(--sidebar-link-muted);
+            transition: transform 0.2s ease;
+        }
+
+        .has-submenu.open > .menu-link--dropdown .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            list-style: none;
+            margin: 0 0 8px 0;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+        }
+
+        .has-submenu.open > .submenu {
+            max-height: 600px;
+        }
+
+        .submenu-link {
+            display: block;
+            text-decoration: none;
+            color: var(--sidebar-link-muted);
+            padding: 8px 12px 8px 44px;
+            border-radius: 8px;
+            margin: 2px 0;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .submenu-link:hover {
+            background-color: var(--sidebar-hover);
+            color: var(--sidebar-link);
+        }
+
+        .submenu-link.active {
+            background-color: var(--primary-light);
+            color: var(--sidebar-link);
+            font-weight: 600;
+        }
+
+        .sidebar.collapsed .menu-link {
+            justify-content: center;
+            padding: 12px;
+        }
+
+        .sidebar.collapsed .menu-link span {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .sidebar.collapsed .dropdown-icon,
+        .sidebar.collapsed .submenu {
+            display: none;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-mini-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .user-mini-profile:hover {
+            background-color: var(--bg-body);
+        }
+
+        .user-mini-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            transition: all 0.3s ease;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .user-info h6 {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-info small {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .btn-logout {
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+            padding: 8px;
+        }
+
+        .btn-logout:hover {
+            color: var(--danger);
+        }
+
+        .sidebar.collapsed .user-info,
+        .sidebar.collapsed .btn-logout {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-footer {
+            justify-content: center;
+            padding: 20px 10px;
+        }
+
+        /* User Dropdown */
+        .user-dropdown-menu {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 200px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .user-dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .sidebar.collapsed .user-dropdown-menu {
+            left: 90px;
+            bottom: 20px;
+        }
+
+        .dropdown-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dropdown-header h6 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .dropdown-header p {
+            margin: 2px 0 0 0;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:first-of-type {
+            border-radius: 0;
+        }
+
+        .dropdown-item i {
+            font-size: 1.1rem;
+            width: 20px;
+            color: var(--text-muted);
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-body);
+            color: var(--primary);
+        }
+
+        .dropdown-item:hover i {
+            color: var(--primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0;
+        }
+
+        /* === MAIN LAYOUT === */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-wrapper.expanded {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+
+        /* === NAVBAR === */
+        .top-navbar {
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .toggle-btn {
+            border: none;
+            background: transparent;
+            font-size: 1.4rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .breadcrumb {
+            margin: 0;
+        }
+
+        .breadcrumb-item {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            color: var(--text-muted);
+        }
+
+        /* === CONTENT AREA === */
+        .content-area {
+            flex: 1;
+            padding: 24px;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+            color: var(--border);
+        }
+
+        /* Footer */
+        .main-footer {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            padding: 20px 30px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .footer-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 991px) {
+            .sidebar { 
+                transform: translateX(-100%); 
+                width: 260px; 
+            }
+            .sidebar.show { 
+                transform: translateX(0); 
+            }
+            .main-wrapper { 
+                margin-left: 0; 
+            }
+            .main-wrapper.expanded { 
+                margin-left: 0; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .page-heading h2 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .page-heading p {
+            margin: 4px 0 0 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .btn-primary-soft {
+            background: rgba(117, 177, 211, 0.2);
+            color: #0f172a;
+            border: 1px solid rgba(117, 177, 211, 0.35);
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        .btn-primary-soft:hover {
+            background: rgba(117, 177, 211, 0.28);
+            color: #0f172a;
+        }
+
+        .action-toolbar {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .search-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f3f4f6;
+            border: 1px solid #eef2f7;
+            border-radius: 10px;
+            padding: 10px 12px;
+            width: min(480px, 100%);
+        }
+
+        .search-input i {
+            color: #64748b;
+        }
+
+        .search-input input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 0.85rem;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .btn-outline-compact {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #334155;
+            font-weight: 600;
+            font-size: 0.82rem;
+            padding: 7px 10px;
+            border-radius: 10px;
+        }
+
+        .btn-outline-compact:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .btn-danger-compact {
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            background: rgba(239, 68, 68, 0.12);
+            color: #b91c1c;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 7px 10px;
+            border-radius: 10px;
+        }
+
+        .btn-danger-compact:hover {
+            background: rgba(239, 68, 68, 0.18);
+            color: #991b1b;
+        }
+
+        .tooltip-wrap {
+            display: inline-flex;
+        }
+
+        .tooltip-wrap > button:disabled {
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .table-card {
+    background: var(--bg-surface);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+
+        .table-scroll {
+            overflow: auto;
+            max-height: 460px;
+        }
+
+        .table-consignments tbody tr.empty-row td {
+    height: 220px;
+    vertical-align: middle;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+
+        .table-consignments {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 980px;
+        }
+
+        .table-consignments thead th {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            z-index: 2;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #475569;
+            padding: 12px 12px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        .table-consignments tbody td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.85rem;
+            color: #0f172a;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .table-consignments tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .table-consignments tbody tr.selected {
+            background: rgba(117, 177, 211, 0.14);
+        }
+
+        .cell-muted {
+            color: #64748b;
+            font-size: 0.82rem;
+            max-width: 380px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .kebab-btn {
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 10px;
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+        }
+
+        .kebab-btn:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .dropdown-menu-actions {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 45px rgba(2, 6, 23, 0.12);
+            padding: 8px;
+            min-width: 180px;
+        }
+
+        .dropdown-menu-actions .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 10px 10px;
+        }
+
+        .dropdown-menu-actions .dropdown-item i {
+            width: 18px;
+        }
+
+        .dropdown-menu-actions .dropdown-item.text-danger {
+            font-weight: 700;
+        }
+
+        .table-footerbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #fff;
+        }
+
+        .table-footerbar .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: #64748b;
+            font-size: 0.82rem;
+        }
+
+        .table-footerbar select {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 0.82rem;
+        }
+
+        .table-footerbar .right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #64748b;
+            font-size: 0.82rem;
+        }
+
+        .empty-row td {
+    background: #fff;
+    font-size: 0.9rem;
+}
+
+
+        .pager-btn {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #334155;
+            border-radius: 10px;
+            padding: 7px 10px;
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+
+        .pager-btn:disabled {
+            opacity: 0.6;
+        }
+
+        .page-pill {
+            min-width: 30px;
+            height: 30px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 8px;
+            background: #fff;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        @media (max-width: 768px) {
+            .action-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar-actions {
+                justify-content: flex-start;
+            }
+        }
+        button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">
+                <div class="brand-logo-box">RT</div>
+                <span class="brand-name">Rejos Transport</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="menu-header">Main</li>
+            <li>
+                <a href="#" class="menu-link active" data-page="dashboard" data-tooltip="Dashboard">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li class="menu-header">Operations</li>
+            <li class="has-submenu open" data-submenu="master">
+                <a href="#" class="menu-link menu-link--dropdown" data-dropdown="master" data-tooltip="Master List" aria-expanded="true">
+                    <i class="bi bi-grid"></i>
+                    <span>Master List</span>
+                    <i class="bi bi-chevron-down dropdown-icon"></i>
+                </a>
+                <ul class="submenu" id="submenu-master" aria-label="Master List">
+                    <li>
+                        <a href="#" class="submenu-link active" data-page="consignment-master" data-bc-parent="Master List" data-bc-child="Consignment Master">Consignment Master</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenu-link" data-page="customer-master" data-bc-parent="Master List" data-bc-child="Customer Master">Customer Master</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenu-link" data-page="vehicle-master" data-bc-parent="Master List" data-bc-child="Vehicle Master">Vehicle Master</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="has-submenu" data-submenu="lr">
+                <a href="#" class="menu-link menu-link--dropdown" data-dropdown="lr" data-tooltip="LR" aria-expanded="false">
+                    <i class="bi bi-truck"></i>
+                    <span>LR</span>
+                    <i class="bi bi-chevron-down dropdown-icon"></i>
+                </a>
+                <ul class="submenu" id="submenu-lr" aria-label="LR">
+                    <li>
+                        <a href="#" class="submenu-link" data-page="lr-master" data-bc-parent="LR" data-bc-child="LR Master">LR Master</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenu-link" data-page="lr-allotment" data-bc-parent="LR" data-bc-child="LR Allotment">LR Allotment</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenu-link" data-page="invoice-master" data-bc-parent="LR" data-bc-child="Invoice Master">Invoice Master</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenu-link" data-page="payment-advice" data-bc-parent="LR" data-bc-child="Payment Advice">Payment Advice</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="menu-header">Management</li>
+            <li>
+                <a href="#" class="menu-link" data-page="reports" data-tooltip="Reports">
+                    <i class="bi bi-file-earmark-bar-graph"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+
+            <li class="menu-header">System</li>
+            <li>
+                <a href="#" class="menu-link" data-page="settings" data-tooltip="Settings">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="user-mini-profile" id="userProfileBtn">
+                <img src="https://ui-avatars.com/api/?name=Kunal+Patil&background=75b1d3&color=fff" alt="User">
+                <div class="user-info">
+                    <h6>Kunal Patil</h6>
+                    <small>kunalpatil192001@g...</small>
+                </div>
+            </div>
+
+            <button id="logoutBtn" class="btn-logout">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+
+            <!-- User Dropdown Menu -->
+            <div class="user-dropdown-menu" id="userDropdown">
+                <div class="dropdown-header">
+                    <h6>Kunal Patil</h6>
+                    <p>kunalpatil192001@gmail.com</p>
+                </div>
+                <button class="dropdown-item" data-action="profile">
+                    <i class="bi bi-person"></i>
+                    <span>Profile</span>
+                </button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" data-action="settings">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" data-action="signout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Sign out</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <nav class="top-navbar">
+            <div class="nav-left">
+                <button class="toggle-btn" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item" id="breadcrumbParent">Master List</li>
+                        <li class="breadcrumb-item active" id="breadcrumbChild">Consignment Master</li>
+                    </ol>
+                </nav>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <div id="dashboard" class="view-section">
+                <div style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+                    <div style="text-align: center; color: var(--text-muted);">
+                        <i class="bi bi-box-seam" style="font-size: 4rem; margin-bottom: 1rem; display: block;"></i>
+                        <h3>Content Area</h3>
+                        <p>Your consignment master content will go here</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="consignment-master" class="view-section active">
+                <div class="page-header">
+                    <div class="page-heading">
+                        <h2>Consignment Master</h2>
+                        <p>Manage your consignments with search, filtering, and bulk operations.</p>
+                    </div>
+                    <button class="btn btn-primary-soft" id="btnAddConsignment">
+                        <i class="bi bi-plus-lg me-2"></i>
+                        Add Consignment
+                    </button>
+                </div>
+
+                <div class="action-toolbar">
+                    <div class="search-input">
+                        <i class="bi bi-search"></i>
+                        <input id="consignmentSearch" type="text" placeholder="Search consignments...">
+                    </div>
+
+                    <div class="toolbar-actions">
+                        <span class="tooltip-wrap" data-bs-toggle="tooltip" data-bs-placement="top" title="Select consignments to perform actions">
+                            <button class="btn btn-outline-compact" id="btnSendEmail" disabled>
+                                <i class="bi bi-envelope me-2"></i>
+                                Send Email
+                            </button>
+                        </span>
+                        <span class="tooltip-wrap" data-bs-toggle="tooltip" data-bs-placement="top" title="Select consignments to perform actions">
+                            <button class="btn btn-outline-compact" id="btnSendSms" disabled>
+                                <i class="bi bi-chat-left-text me-2"></i>
+                                Send SMS
+                            </button>
+                        </span>
+                        <span class="tooltip-wrap" data-bs-toggle="tooltip" data-bs-placement="top" title="Select consignments to perform actions">
+                            <button class="btn btn-danger-compact" id="btnDeleteSelected" disabled>
+                                <i class="bi bi-trash3 me-2"></i>
+                                Delete
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-scroll">
+                        <table class="table-consignments" aria-label="Consignment list">
+                            <thead>
+                                <tr>
+                                    <th style="width: 46px;">
+                                        <input type="checkbox" class="form-check-input" id="selectAllConsignments" aria-label="Select all">
+                                    </th>
+                                    <th>Consignment Code</th>
+                                    <th>Consignment Name</th>
+                                    <th>Address</th>
+                                    <th>Phone No</th>
+                                    <th>Mobile No</th>
+                                    <th>Email</th>
+                                    <th style="width: 64px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="consignmentTableBody">
+    <tr class="empty-row">
+        <td colspan="8" style="text-align:center; padding:40px; color:#94a3b8;">
+            No consignments found
+        </td>
+    </tr>
+</tbody>
+
+                        </table>
+                    </div>
+
+                    <div class="table-footerbar">
+                        <div class="left">
+                            <span id="tableInfoText">Showing 0 to 0 of 0 records</span>
+                            <span>Show</span>
+                            <select id="pageSizeSelect" aria-label="Rows per page">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50" selected>50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>per page</span>
+                        </div>
+                        <div class="right">
+                            <button class="pager-btn" id="btnPrevPage">Previous</button>
+                            <span class="page-pill" id="pageIndicator">1</span>
+                            <button class="pager-btn" id="btnNextPage">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="customer-master" class="view-section">
+                <div class="empty-state">
+                    <i class="bi bi-people"></i>
+                    <h3>Customer Master</h3>
+                    <p>Manage customers and contact details.</p>
+                </div>
+            </div>
+
+            <div id="vehicle-master" class="view-section">
+                <div class="empty-state">
+                    <i class="bi bi-truck-front"></i>
+                    <h3>Vehicle Master</h3>
+                    <p>Manage vehicles, capacity, and availability.</p>
+                </div>
+            </div>
+
+            <div id="lr-master" class="view-section">
+                <div class="empty-state">
+                    <i class="bi bi-truck"></i>
+                    <h3>LR Master</h3>
+                    <p>Create and manage LR records.</p>
+                </div>
+            </div>
+
+            <div id="lr-allotment" class="view-section">
+                <div class="empty-state">
+                    <i class="bi bi-diagram-3"></i>
+                    <h3>LR Allotment</h3>
+                    <p>Assign LRs to trips and vehicles.</p>
+                </div>
+            </div>
+
+            <div id="invoice-master" class="view-section">
+                <div class="empty-state">
+                    <i class="bi bi-receipt"></i>
+                    <h3>Invoice Master</h3>
+                    <p>Create invoices and track billing status.</p>
+                </div>
+            </div>
+
+            <div id="payment-advice" class="view-section">
+                <div class="empty-state">
+                    <i class="bi bi-credit-card"></i>
+                    <h3>Payment Advice</h3>
+                    <p>Manage payment advice and settlements.</p>
+                </div>
+            </div>
+
+            <div id="reports" class="view-section">
+                <div class="empty-state">
+                    <i class="bi bi-file-earmark-bar-graph"></i>
+                    <h3>Reports & Analytics</h3>
+                    <p>View and generate reports</p>
+                </div>
+            </div>
+
+            <div id="settings" class="view-section">
+                <div class="empty-state">
+                    <i class="bi bi-gear"></i>
+                    <h3>System Settings</h3>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+/* =========================
+   DUMMY DATA
+========================= */
+const consignments = [
+    {
+        code: "CNS003",
+        name: "Tech Solutions 1",
+        address: "103 TechSolutions Street, Chicago, IL 10003",
+        phone: "+1-555-1003",
+        mobile: "+1-555-2003",
+        email: "contact3@techsolutions.com"
+    },
+    {
+        code: "CNS004",
+        name: "Garden Supplies 1",
+        address: "104 GardenSupplies Street, Houston, TX 10004",
+        phone: "+1-555-1004",
+        mobile: "+1-555-2004",
+        email: "contact4@gardensupplies.com"
+    },
+    {
+        code: "CNS005",
+        name: "Book Haven 1",
+        address: "105 BookHaven Street, Phoenix, AZ 10005",
+        phone: "+1-555-1005",
+        mobile: "+1-555-2005",
+        email: "contact5@bookhaven.com"
+    }
+];
+
+/* =========================
+   RENDER TABLE
+========================= */
+function renderConsignments() {
+    const tbody = document.getElementById("consignmentTableBody");
+    tbody.innerHTML = "";
+
+    consignments.forEach(item => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td><input type="checkbox" class="form-check-input"></td>
+            <td>${item.code}</td>
+            <td>${item.name}</td>
+            <td class="cell-muted">${item.address}</td>
+            <td>${item.phone}</td>
+            <td>${item.mobile}</td>
+            <td>${item.email}</td>
+            <td>
+                <button class="kebab-btn">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    document.getElementById("tableInfoText").textContent =
+        `Showing 1 to ${consignments.length} of ${consignments.length} records`;
+}
+
+/* =========================
+   PAGE INIT
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* Sidebar toggle */
+    const sidebar = document.getElementById("sidebar");
+    const mainWrapper = document.getElementById("mainWrapper");
+    const toggleBtn = document.getElementById("sidebarToggle");
+
+    toggleBtn.addEventListener("click", () => {
+        if (window.innerWidth >= 992) {
+            sidebar.classList.toggle("collapsed");
+            mainWrapper.classList.toggle("expanded");
+        } else {
+            sidebar.classList.toggle("show");
+        }
+    });
+
+    /* User dropdown */
+    const userProfileBtn = document.getElementById("userProfileBtn");
+    const userDropdown = document.getElementById("userDropdown");
+
+    userProfileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle("show");
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!userProfileBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+            userDropdown.classList.remove("show");
+        }
+    });
+
+    /* Sidebar submenu toggle */
+    document.querySelectorAll(".menu-link--dropdown").forEach(trigger => {
+        trigger.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (sidebar.classList.contains("collapsed")) return;
+
+            const parent = trigger.closest(".has-submenu");
+            parent.classList.toggle("open");
+        });
+    });
+
+    /* Navigation */
+    const viewSections = document.querySelectorAll(".view-section");
+    const breadcrumbParent = document.getElementById("breadcrumbParent");
+    const breadcrumbChild = document.getElementById("breadcrumbChild");
+
+    function setActiveSection(id, parent, child) {
+        viewSections.forEach(v => v.classList.remove("active"));
+        document.getElementById(id)?.classList.add("active");
+        breadcrumbParent.textContent = parent || "";
+        breadcrumbChild.textContent = child || "";
+    }
+
+    document.querySelectorAll(".submenu-link").forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            document.querySelectorAll(".submenu-link").forEach(l => l.classList.remove("active"));
+            link.classList.add("active");
+
+            setActiveSection(
+                link.dataset.page,
+                link.dataset.bcParent,
+                link.dataset.bcChild
+            );
+        });
+    });
+
+    /* 🔥 RENDER DATA */
+    renderConsignments();
+});
+</script>
+
+</body>
+</html>
