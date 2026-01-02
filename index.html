@@ -898,6 +898,61 @@
     opacity: 0.55;
     cursor: not-allowed;
 }
+/* Dashboard Cards */
+.stat-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow);
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.bg-primary-soft { background: rgba(59,130,246,.15); color:#2563eb; }
+.bg-success-soft { background: rgba(16,185,129,.15); color:#059669; }
+.bg-warning-soft { background: rgba(245,158,11,.18); color:#b45309; }
+.bg-danger-soft  { background: rgba(239,68,68,.18); color:#b91c1c; }
+
+.stat-label {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.stat-value {
+    margin: 0;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+/* Activity */
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-list li {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 0.9rem;
+}
+
+.activity-list li:last-child {
+    border-bottom: none;
+}
 
     </style>
 </head>
@@ -1036,7 +1091,56 @@
                 <div style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
                     <div style="text-align: center; color: var(--text-muted);">
                         <i class="bi bi-box-seam" style="font-size: 4rem; margin-bottom: 1rem; display: block;"></i>
-                        <h3>Content Area</h3>
+                        <div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-primary-soft">
+                <i class="bi bi-box-seam"></i>
+            </div>
+            <div>
+                <p class="stat-label">Total Consignments</p>
+                <h3 class="stat-value">128</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-success-soft">
+                <i class="bi bi-people"></i>
+            </div>
+            <div>
+                <p class="stat-label">Customers</p>
+                <h3 class="stat-value">42</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-warning-soft">
+                <i class="bi bi-truck"></i>
+            </div>
+            <div>
+                <p class="stat-label">Active Vehicles</p>
+                <h3 class="stat-value">18</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-danger-soft">
+                <i class="bi bi-receipt"></i>
+            </div>
+            <div>
+                <p class="stat-label">Pending Invoices</p>
+                <h3 class="stat-value">7</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
                         <p>Your consignment master content will go here</p>
                     </div>
                 </div>
@@ -1284,6 +1388,19 @@
             Create LR
         </button>
     </div>
+<div class="table-card">
+    <div class="p-3 border-bottom fw-bold">
+        Recent Activity
+    </div>
+    <div class="p-3">
+        <ul class="activity-list">
+            <li>📦 New Consignment added (CNS005)</li>
+            <li>🚚 Vehicle MH12 AB 1234 assigned to LR002</li>
+            <li>🧾 Invoice INV001 generated</li>
+            <li>💰 Payment pending from Rahul Traders</li>
+        </ul>
+    </div>
+</div>
 
     <div class="table-card">
         <div class="table-scroll">
@@ -1548,7 +1665,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 link.dataset.bcChild
             );
             
-            if (link.dataset.page === "customer-master") {
+if (link.dataset.page === "customer-master") {
     renderCustomers();
 }
 if (link.dataset.page === "vehicle-master") {
